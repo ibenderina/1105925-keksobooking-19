@@ -1,17 +1,43 @@
 'use strict';
 
 (function () {
-  var cardTemplate = document.querySelector('#card').content;
-  var cardTemplateItem = cardTemplate.children[0];
+  var cardTemplateItem = window.tools.getTemplate('#card');
+  var mapFilterContainer = document.querySelector('.map__filters-container');
 
-  var createCard = function () {
+  // проверяем наличие удобств в информации с сервера, добавляем нужные в карточку товара, остальные скрываем
+  var showFeatures = function (offer, popupFeature) {
+    if (offer.features) {
+      popupFeature.forEach(function (item) {
+        item.classList.remove('popup__feature');
+        var similarData = offer.features.some(function (element) {
+          return item.className.includes(element);
+        });
+        if (similarData) {
+          item.classList.add('popup__feature');
+        }
+      });
+    }
+  };
+  //  проверяем наличие фотографий в информации с сервера, добавляем их в карточку объявления, лишние теги img скрываем (если нет фото)
+  var showPhotos = function (offer, popupPhoto, dataPhotos, popupPhotos) {
+    if (offer.photos) {
+      offer.photos.forEach(function (item) {
+        var popupPhotoClone = popupPhoto.cloneNode();
+        popupPhotoClone.src = item;
+        dataPhotos.appendChild(popupPhotoClone);
+      });
+    }
+    popupPhoto.classList.add('hidden');
+    popupPhotos.appendChild(dataPhotos);
+  };
+  //  собираем все данные для карточки объявления в информации с сервера
+  var createCard = function (indexOfCard) {
     var cardTemplateItemClone = cardTemplateItem.cloneNode(true);
     var popupAvatar = cardTemplateItemClone.querySelector('.popup__avatar');
     var popupPhotos = cardTemplateItemClone.querySelector('.popup__photos');
     var popupPhoto = cardTemplateItemClone.querySelector('.popup__photo');
-    var popupFeatures = cardTemplateItemClone.querySelector('.popup__features');
     var popupFeature = cardTemplateItemClone.querySelectorAll('.popup__feature');
-    var data = window.data[0];
+    var data = window.data[indexOfCard];
     var offer = data.offer;
     var dataPhotos = new DocumentFragment();
     var popupData = [
@@ -24,23 +50,9 @@
       ['.popup__description', offer.description]
     ];
     popupAvatar.src = data.author.avatar;
-    if (offer.photos) {
-      offer.photos.forEach(function (item) {
-        var popupPhotoClone = popupPhoto.cloneNode();
-        popupPhotoClone.src = item;
-        dataPhotos.appendChild(popupPhotoClone);
-      });
-    }
-    popupPhoto.classList.add('hidden');
-    popupPhotos.appendChild(dataPhotos);
-    if (offer.features) {
-      popupFeature.forEach(function (item) {
-        // var popupFeatureClass = item.className;
-        // if () {
-        //   offer.features.indexOf(popupFeatureClass);
-        // }
-      });
-    }
+
+    showPhotos(offer, popupPhoto, dataPhotos, popupPhotos);
+    showFeatures(offer, popupFeature);
 
     popupData.forEach(function (item) {
       if (item[1]) {
@@ -51,5 +63,23 @@
     return cardTemplateItemClone;
   };
 
-  window.createCard = createCard;
+  //  отображаем или скрываем данные в карточке объявления
+  var showCreatedCards = function (element) {
+    var card = createCard(parseInt(element.dataset.id, 10));
+    var mapCard = document.querySelector('.map__card');
+    if (mapCard) {
+      mapCard.remove();
+    }
+    mapFilterContainer.insertAdjacentElement('beforeBegin', card);
+    var popupClose = card.querySelector('.popup__close');
+    popupClose.addEventListener('click', function () {
+      window.tools.onButtonCloseClick(card);
+    });
+  };
+
+  window.card = {
+    createCard: createCard,
+    showCreatedCards: showCreatedCards
+  };
 })();
+

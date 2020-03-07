@@ -84,7 +84,12 @@
     <!-- Форма объявления -->
     <section class="notice">
       <h2 class="notice__title">Ваше объявление</h2>
-      <form class="ad-form ad-form--disabled" method="post" enctype="multipart/form-data" autocomplete="off">
+      <form
+        class="ad-form ad-form--disabled"
+        method="post"
+        enctype="multipart/form-data"
+        autocomplete="off"
+        action="https://js.dump.academy/keksobooking">
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Ваша фотография (для карты)</legend>
           <div class="ad-form-header__upload">
@@ -100,7 +105,13 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио">
+          <input id="title"
+                 name="title"
+                 type="text"
+                 placeholder="Милая, уютная квартирка в центре Токио"
+                 minlength="30"
+                 maxlength="100"
+                 required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес</label>
@@ -117,7 +128,13 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="5000">
+          <input
+            id="price"
+            name="price"
+            type="number"
+            placeholder="5000"
+            max="1000000"
+            required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
           <label class="ad-form__label" for="timein">Время заезда и выезда</label>
@@ -180,7 +197,9 @@
           </div>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--submit">
-          <button class="ad-form__submit" type="submit">Опубликовать</button>
+          <button
+            class="ad-form__submit"
+            type="submit">Опубликовать</button>
           или <button class="ad-form__reset" type="reset">очистить</button>
         </fieldset>
       </form>
@@ -252,9 +271,10 @@
 
 <script src="js/backend.js"></script>
 <script src="js/tools.js"></script>
-<script src="js/mock.js"></script>
 <script src="js/card.js"></script>
 <script src="js/map.js"></script>
+<script src="js/moving_pin.js"></script>
+<script src="js/form.js"></script>
 
 </body>
 </html>
