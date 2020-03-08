@@ -52,8 +52,7 @@
     window.data = response;
   };
 
-  var onErrorLoad = function (response) {
-    //
+  var onErrorLoad = function () {
   };
 
   deactivatePage();
@@ -75,7 +74,8 @@
   });
   window.map = {
     showCreatedAds: showCreatedAds,
-    pinSize: pinSize
+    pinSize: pinSize,
+    mapPins: mapPins
   };
 })();
 

@@ -522,7 +522,8 @@ fieldset {
           align-items: center;
 }
 
-.ad-form-header__preview {
+.ad-form-header__preview,
+.ad-form-header__preview-img {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -806,7 +807,8 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
-.ad-form__photo {
+.ad-form__photo,
+.ad-form__photo-img {
   margin-right: 10px;
   margin-bottom: 10px;
 

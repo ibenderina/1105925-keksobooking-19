@@ -9,7 +9,7 @@
   var HIDDEN_CLASS = 'hidden';
   var DEBOUNCE_INTERVAL = 500; // ms
 
-  var onButtonCloseClick = function (element) {
+  var closeWindow = function (element) {
     element.classList.add(HIDDEN_CLASS);
   };
 
@@ -37,7 +37,7 @@
   };
 
   window.tools = {
-    onButtonCloseClick: onButtonCloseClick,
+    closeWindow: closeWindow,
     getTemplate: getTemplate,
     Key: Key,
     debounce: debounce

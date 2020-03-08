@@ -73,7 +73,12 @@
     mapFilterContainer.insertAdjacentElement('beforeBegin', card);
     var popupClose = card.querySelector('.popup__close');
     popupClose.addEventListener('click', function () {
-      window.tools.onButtonCloseClick(card);
+      window.tools.closeWindow(card);
+    });
+    document.addEventListener('keydown', function (evt) {
+      if (evt.key === window.tools.Key.ESC) {
+        window.tools.closeWindow(card);
+      }
     });
   };
 
