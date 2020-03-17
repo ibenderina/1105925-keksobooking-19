@@ -35,4 +35,8 @@
     uploadImage(adFormHouseImagesInput, newImg);
     adFormHouseImage.appendChild(newImg);
   });
+
+  window.uploadPhotos = {
+    adFormAvatarImg: adFormAvatarImg
+  };
 })();

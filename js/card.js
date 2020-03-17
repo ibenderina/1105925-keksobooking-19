@@ -55,9 +55,11 @@
     showFeatures(offer, popupFeature);
 
     popupData.forEach(function (item) {
+      var dataSelector = cardTemplateItemClone.querySelector(item[0]);
       if (item[1]) {
-        var dataSelector = cardTemplateItemClone.querySelector(item[0]);
         dataSelector.textContent = item[1];
+      } else {
+        dataSelector.textContent = '';
       }
     });
     return cardTemplateItemClone;

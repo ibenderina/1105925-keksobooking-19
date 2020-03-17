@@ -10,7 +10,9 @@
   var DEBOUNCE_INTERVAL = 500; // ms
 
   var closeWindow = function (element) {
-    element.classList.add(HIDDEN_CLASS);
+    if (element) {
+      element.classList.add(HIDDEN_CLASS);
+    }
   };
 
   var getTemplate = function (selector) {

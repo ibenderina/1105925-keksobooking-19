@@ -2,9 +2,9 @@
 
 (function () {
   var pinSize = {
-    HALF_WIDTH: 40 / 2,
-    HEIGHT: 44,
-    HALF_HEIGHT: 44 / 2
+    HALF_WIDTH: 65 / 2,
+    HEIGHT: 65,
+    HALF_HEIGHT: 65 / 2
   };
   var map = document.querySelector('.map');
   var mapPins = document.querySelector('.map__pins');
@@ -29,27 +29,32 @@
     mapFilters.classList.remove('ad-form--disabled');
   };
 
-  var showCreatedAds = function () {
-    window.data.forEach(function (item, index) {
-      var pinEl = pinTemplateItem.cloneNode(true);
-      pinEl.dataset.id = index;
-      var pinTemplateImg = pinEl.querySelector('.map__pin-img');
-      var X = pinSize.HALF_WIDTH;
-      var Y = pinSize.HEIGHT;
-      pinEl.style.left = (item.location.x - X) + 'px';
-      pinEl.style.top = (item.location.y - Y) + 'px';
-      pinTemplateImg.src = item.author.avatar;
-      pinTemplateImg.alt = item.offer.title;
-      adsFragment.appendChild(pinEl);
-      pinEl.addEventListener('click', function () {
-        window.card.showCreatedCards(pinEl);
-      });
-    });
+  var showCreatedAds = function (data) {
+    data.slice(0, 5).forEach(createAds);
     mapPins.appendChild(adsFragment);
   };
 
+  var createAds = function (item, index) {
+    var pinEl = pinTemplateItem.cloneNode(true);
+    pinEl.dataset.id = index;
+    var pinTemplateImg = pinEl.querySelector('.map__pin-img');
+    var X = pinSize.HALF_WIDTH;
+    var Y = pinSize.HEIGHT;
+    pinEl.style.left = (item.location.x - X) + 'px';
+    pinEl.style.top = (item.location.y - Y) + 'px';
+    pinTemplateImg.src = item.author.avatar;
+    pinTemplateImg.alt = item.offer.title;
+    adsFragment.appendChild(pinEl);
+    pinEl.addEventListener('click', function () {
+      window.card.showCreatedCards(pinEl);
+    });
+  };
+
   var onSuccessLoad = function (response) {
-    window.data = response;
+    window.data = response.map(function (element, id) {
+      element.id = id;
+      return element;
+    });
   };
 
   var onErrorLoad = function () {
@@ -62,14 +67,14 @@
   mapPinMain.addEventListener('mousedown', function (evt) {
     if (evt.button === window.tools.Key.LEFT_MOUSE) {
       activatePage();
-      showCreatedAds();
+      showCreatedAds(window.data);
     }
   });
 
   mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.key === window.tools.Key.ENTER) {
       activatePage();
-      showCreatedAds();
+      showCreatedAds(window.data);
     }
   });
   window.map = {
