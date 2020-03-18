@@ -7,6 +7,7 @@
   var priceInput = document.querySelector('#price');
   var adFormSubmit = document.querySelector('.ad-form__submit');
   var adForm = document.querySelector('.ad-form');
+  var adFormReset = document.querySelector('.ad-form__reset');
   var housingFilter = document.querySelector('#type');
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
@@ -30,44 +31,6 @@
       min: 0,
       placeholder: '0'
     },
-  };
-
-  var onAfterUploadMessage = function (messageType) {
-    var errorTemplate = window.tools.getTemplate('#' + messageType).cloneNode(true);
-    var main = document.querySelector('main');
-
-    main.appendChild(errorTemplate);
-    window.addEventListener('keydown', function (evt) {
-      if (evt.key === window.tools.Key.ESC) {
-        errorTemplate.remove();
-      }
-    });
-    errorTemplate.addEventListener('click', function () {
-      errorTemplate.remove();
-    });
-  };
-
-  var onAdLoadError = function () {
-    onAfterUploadMessage('error');
-  };
-
-  var onAdLoadSuccess = function () {
-    onAfterUploadMessage('success');
-  };
-
-  var submitSetup = function (form) {
-    var data = new FormData(form);
-    window.backend.save(data, function () {
-      onAdLoadSuccess();
-    }, function () {
-      onAdLoadError();
-    });
-  };
-
-  var onSetupSubmitEnterKeydown = function (evt, form) {
-    if (evt.key === window.tools.Key.ENTER) {
-      submitSetup(evt, form);
-    }
   };
 
   var checkCapacityValidation = function () {
@@ -98,13 +61,66 @@
     priceInput.min = housingTypes[housingFilter.value].min;
   };
 
-  var checkTimeValidation = function () {
+  var checkOutTimeValidation = function () {
     timeOut.value = timeIn.value;
+  };
+
+  var checkInTimeValidation = function () {
+    timeIn.value = timeOut.value;
+  };
+
+  var resetForm = function () {
+    window.resetPhotos();
+    window.removeAllPins();
+    window.movingPin.moveMainPinOnCenter();
+    checkCapacityValidation();
+    window.map.deactivatePage();
+    adForm.reset();
+    window.movingPin.showCurrentAddress();
+  };
+
+  var onAfterUploadMessage = function (messageType) {
+    var errorTemplate = window.tools.getTemplate('#' + messageType).cloneNode(true);
+    var main = document.querySelector('main');
+
+    main.appendChild(errorTemplate);
+    window.addEventListener('keydown', function (evt) {
+      if (evt.key === window.tools.Key.ESC) {
+        errorTemplate.remove();
+      }
+    });
+    errorTemplate.addEventListener('click', function () {
+      errorTemplate.remove();
+    });
+  };
+
+  var onAdLoadError = function () {
+    onAfterUploadMessage('error');
+  };
+
+  var onAdLoadSuccess = function () {
+    resetForm();
+    onAfterUploadMessage('success');
+  };
+
+  var submitSetup = function (form) {
+    var data = new FormData(form);
+    window.backend.save(data, function () {
+      onAdLoadSuccess();
+    }, function () {
+      onAdLoadError();
+    });
+  };
+
+  var onSetupSubmitEnterKeydown = function (evt, form) {
+    if (evt.key === window.tools.Key.ENTER) {
+      submitSetup(evt, form);
+    }
   };
 
   checkCapacityValidation();
   checkPriceValidation();
-  checkTimeValidation();
+  checkOutTimeValidation();
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
@@ -131,10 +147,31 @@
   });
 
   timeIn.addEventListener('change', function () {
-    checkTimeValidation();
+    checkOutTimeValidation();
+  });
+
+  timeOut.addEventListener('change', function () {
+    checkInTimeValidation();
   });
 
   roomNumber.addEventListener('change', function () {
     checkCapacityValidation();
   });
+
+  adFormReset.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    resetForm();
+  });
+
+  adFormReset.addEventListener('keydown', function (evt) {
+    evt.preventDefault();
+    if (evt.key === window.tools.Key.ESC) {
+      resetForm();
+    }
+  });
+
+  window.form = {
+    onAdLoadError: onAdLoadError,
+    checkCapacityValidation: checkCapacityValidation
+  };
 })();

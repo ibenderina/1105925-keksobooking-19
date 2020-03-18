@@ -5,9 +5,21 @@
     MIN: 130,
     MAX: 630
   };
+  var MapPinStartCoord = {
+    LEFT: 570 + 'px',
+    TOP: 375 + 'px'
+  };
   var movingMapPin = document.querySelector('.map__pin--main');
   var address = document.querySelector('#address');
-  address.value = movingMapPin.offsetLeft + ', ' + movingMapPin.offsetTop;
+
+  var moveMainPinOnCenter = function () {
+    movingMapPin.style.left = MapPinStartCoord.LEFT;
+    movingMapPin.style.top = MapPinStartCoord.TOP;
+  };
+
+  var showCurrentAddress = function () {
+    address.value = movingMapPin.offsetLeft + ', ' + movingMapPin.offsetTop;
+  };
 
   movingMapPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -58,5 +70,8 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
+  window.movingPin = {
+    showCurrentAddress: showCurrentAddress,
+    moveMainPinOnCenter: moveMainPinOnCenter
+  };
 })();

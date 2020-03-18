@@ -17,21 +17,23 @@
 
   var deactivatePage = function () {
     map.classList.add('map--faded');
+    var mapCard = document.querySelector('.map__card');
+    if (mapCard) {
+      mapCard.remove();
+    }
     adForm.classList.add('ad-form--disabled');
     adFormFieldset.disabled = true;
+    mapFilters.reset();
     mapFilters.classList.add('ad-form--disabled');
+    window.movingPin.showCurrentAddress();
   };
 
   var activatePage = function () {
     map.classList.remove('map--faded');
+    window.form.checkCapacityValidation();
     adForm.classList.remove('ad-form--disabled');
     adFormFieldset.disabled = false;
     mapFilters.classList.remove('ad-form--disabled');
-  };
-
-  var showCreatedAds = function (data) {
-    data.slice(0, 5).forEach(createAds);
-    mapPins.appendChild(adsFragment);
   };
 
   var createAds = function (item, index) {
@@ -50,6 +52,11 @@
     });
   };
 
+  var showCreatedAds = function (data) {
+    data.slice(0, 5).forEach(createAds);
+    mapPins.appendChild(adsFragment);
+  };
+
   var onSuccessLoad = function (response) {
     window.data = response.map(function (element, id) {
       element.id = id;
@@ -57,12 +64,9 @@
     });
   };
 
-  var onErrorLoad = function () {
-  };
-
   deactivatePage();
 
-  window.backend.load(onSuccessLoad, onErrorLoad);
+  window.backend.load(onSuccessLoad, window.form.onAdLoadError);
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     if (evt.button === window.tools.Key.LEFT_MOUSE) {
@@ -79,6 +83,7 @@
   });
   window.map = {
     showCreatedAds: showCreatedAds,
+    deactivatePage: deactivatePage,
     pinSize: pinSize,
     mapPins: mapPins
   };

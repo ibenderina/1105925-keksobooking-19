@@ -4,7 +4,6 @@
   var cardTemplateItem = window.tools.getTemplate('#card');
   var mapFilterContainer = document.querySelector('.map__filters-container');
 
-  // проверяем наличие удобств в информации с сервера, добавляем нужные в карточку товара, остальные скрываем
   var showFeatures = function (offer, popupFeature) {
     if (offer.features) {
       popupFeature.forEach(function (item) {
@@ -18,7 +17,7 @@
       });
     }
   };
-  //  проверяем наличие фотографий в информации с сервера, добавляем их в карточку объявления, лишние теги img скрываем (если нет фото)
+
   var showPhotos = function (offer, popupPhoto, dataPhotos, popupPhotos) {
     if (offer.photos) {
       offer.photos.forEach(function (item) {
@@ -30,7 +29,7 @@
     popupPhoto.classList.add('hidden');
     popupPhotos.appendChild(dataPhotos);
   };
-  //  собираем все данные для карточки объявления в информации с сервера
+
   var createCard = function (indexOfCard) {
     var cardTemplateItemClone = cardTemplateItem.cloneNode(true);
     var popupAvatar = cardTemplateItemClone.querySelector('.popup__avatar');
@@ -65,7 +64,6 @@
     return cardTemplateItemClone;
   };
 
-  //  отображаем или скрываем данные в карточке объявления
   var showCreatedCards = function (element) {
     var card = createCard(parseInt(element.dataset.id, 10));
     var mapCard = document.querySelector('.map__card');

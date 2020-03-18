@@ -2,6 +2,7 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var BASIC_AVATAR = 'img/muffin-grey.svg';
   var adFormAvatarImg = document.querySelector('.ad-form-header__preview-img');
   var adFormAvatarInput = document.querySelector('#avatar');
   var adFormHouseImagesInput = document.querySelector('#images');
@@ -25,6 +26,14 @@
     }
   };
 
+  var resetPhotos = function () {
+    adFormAvatarImg.src = BASIC_AVATAR;
+    var img = adFormHouseImage.querySelectorAll('img');
+    if (img) {
+      adFormHouseImage.innerHTML = '';
+    }
+  };
+
   adFormAvatarInput.addEventListener('change', function () {
     uploadImage(adFormAvatarInput, adFormAvatarImg);
   });
@@ -36,7 +45,5 @@
     adFormHouseImage.appendChild(newImg);
   });
 
-  window.uploadPhotos = {
-    adFormAvatarImg: adFormAvatarImg
-  };
+  window.resetPhotos = resetPhotos;
 })();

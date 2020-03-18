@@ -3,15 +3,6 @@
 (function () {
   var mapFilter = document.querySelectorAll('.map__filter, .map__checkbox');
 
-  var filterFeatureFactory = function (feature) {
-    return function (offer, element) {
-      if (element.checked) {
-        return offer.features.includes(feature);
-      }
-      return true;
-    };
-  };
-
   var housingPriceFilter = {
     'middle': function (offer) {
       return offer.price >= 10000 && offer.price < 50000;
@@ -75,6 +66,15 @@
     }
   };
 
+  var filterFeatureFactory = function (feature) {
+    return function (offer, element) {
+      if (element.checked) {
+        return offer.features.includes(feature);
+      }
+      return true;
+    };
+  };
+
   var filters = {
     'housing-price': housingPriceFilter,
     'housing-type': housingTypeFilter,
@@ -121,17 +121,25 @@
     });
   };
 
-  var renderFilteredPins = function (filteredData) {
+  var removeAllPins = function () {
     var pin = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     pin.forEach(function (element) {
       element.remove();
     });
+  };
+
+  var renderFilteredPins = function (filteredData) {
+    removeAllPins();
     window.map.showCreatedAds(filteredData);
   };
 
+  var debouncedFilterHouses = window.tools.debounce(filterHouses);
+
   mapFilter.forEach(function (item) {
     item.addEventListener('change', function (evt) {
-      filterHouses(evt);
+      debouncedFilterHouses(evt);
     });
   });
+
+  window.removeAllPins = removeAllPins;
 })();
