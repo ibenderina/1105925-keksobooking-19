@@ -25,8 +25,8 @@
     return element.value === 'any' ? true : offer.rooms === parseInt(element.value, 10);
   };
 
-  var FilterHousingType = function (offer, element) {
-    return element.value === offer.type;
+  var filterHousingType = function (offer, element) {
+    return element.value === 'any' ? true : element.value === offer.type;
   };
 
   var filterFeatureFactory = function (feature) {
@@ -49,7 +49,7 @@
       case 'housing-price':
         return filterHousingPrice;
       case 'housing-type':
-        return FilterHousingType;
+        return filterHousingType;
       case 'housing-rooms':
         return filterHousingRooms;
       case 'housing-guests':
