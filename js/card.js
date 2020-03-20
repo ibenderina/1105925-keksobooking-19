@@ -36,7 +36,7 @@
     var popupPhotos = cardTemplateItemClone.querySelector('.popup__photos');
     var popupPhoto = cardTemplateItemClone.querySelector('.popup__photo');
     var popupFeature = cardTemplateItemClone.querySelectorAll('.popup__feature');
-    var data = window.data[indexOfCard];
+    var data = window.map.data[indexOfCard];
     var offer = data.offer;
     var dataPhotos = new DocumentFragment();
     var popupData = [
@@ -66,25 +66,22 @@
 
   var showCreatedCards = function (element) {
     var card = createCard(parseInt(element.dataset.id, 10));
-    var mapCard = document.querySelector('.map__card');
-    if (mapCard) {
-      mapCard.remove();
-    }
+    window.tools.closeWindow('.map__card');
     mapFilterContainer.insertAdjacentElement('beforeBegin', card);
     var popupClose = card.querySelector('.popup__close');
     popupClose.addEventListener('click', function () {
       window.tools.closeWindow(card);
-    });
-    document.addEventListener('keydown', function (evt) {
-      if (evt.key === window.tools.Key.ESC) {
-        window.tools.closeWindow(card);
-      }
+      window.map.removeActivePin();
     });
   };
 
-  window.card = {
-    createCard: createCard,
-    showCreatedCards: showCreatedCards
-  };
+  document.addEventListener('keydown', function (evt) {
+    if (evt.key === window.tools.Key.ESC) {
+      window.tools.closeWindow('.map__card');
+      window.map.removeActivePin();
+    }
+  });
+
+  window.showCreatedCards = showCreatedCards;
 })();
 

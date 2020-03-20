@@ -9,6 +9,11 @@
     LEFT: 570 + 'px',
     TOP: 375 + 'px'
   };
+  var pinSize = {
+    HALF_WIDTH: 65 / 2,
+    HEIGHT: 65,
+    HALF_HEIGHT: 65 / 2
+  };
   var movingMapPin = document.querySelector('.map__pin--main');
   var address = document.querySelector('#address');
 
@@ -36,10 +41,10 @@
       startCoordsX = moveEvt.clientX;
       startCoordsY = moveEvt.clientY;
       var coordsX = movingMapPin.offsetLeft - shiftX;
-      if (coordsX < -window.map.pinSize.HALF_WIDTH) {
-        coordsX = -window.map.pinSize.HALF_WIDTH;
-      } else if (coordsX > window.map.mapPins.clientWidth - window.map.pinSize.HALF_WIDTH) {
-        coordsX = window.map.mapPins.clientWidth - window.map.pinSize.HALF_WIDTH * 2;
+      if (coordsX < -pinSize.HALF_WIDTH) {
+        coordsX = -pinSize.HALF_WIDTH;
+      } else if (coordsX > window.map.pins.clientWidth - pinSize.HALF_WIDTH) {
+        coordsX = window.map.pins.clientWidth - pinSize.HALF_WIDTH;
       }
       var coordsY = movingMapPin.offsetTop - shiftY;
       if (coordsY < Y.MIN) {
@@ -49,21 +54,20 @@
       }
       movingMapPin.style.left = coordsX + 'px';
       movingMapPin.style.top = coordsY + 'px';
-      address.value = coordsX + ', ' + coordsY;
+      address.value = parseInt(coordsX + pinSize.HALF_WIDTH, 10) + ', ' + parseInt(coordsY + pinSize.HEIGHT, 10);
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
 
       if (trigger) {
-        var onPreventDefaultClick = function (clickEvt) {
+        var onClickPreventDefault = function (clickEvt) {
           clickEvt.preventDefault();
-          movingMapPin.removeEventListener('click', onPreventDefaultClick);
+          movingMapPin.removeEventListener('click', onClickPreventDefault);
         };
-        movingMapPin.addEventListener('click', onPreventDefaultClick);
+        movingMapPin.addEventListener('click', onClickPreventDefault);
       }
     };
 
@@ -72,6 +76,7 @@
   });
   window.movingPin = {
     showCurrentAddress: showCurrentAddress,
-    moveMainPinOnCenter: moveMainPinOnCenter
+    moveOnCenter: moveMainPinOnCenter,
+    size: pinSize
   };
 })();

@@ -72,7 +72,7 @@
   var resetForm = function () {
     window.resetPhotos();
     window.removeAllPins();
-    window.movingPin.moveMainPinOnCenter();
+    window.movingPin.moveOnCenter();
     checkCapacityValidation();
     window.map.deactivatePage();
     adForm.reset();
@@ -112,12 +112,6 @@
     });
   };
 
-  var onSetupSubmitEnterKeydown = function (evt, form) {
-    if (evt.key === window.tools.Key.ENTER) {
-      submitSetup(evt, form);
-    }
-  };
-
   checkCapacityValidation();
   checkPriceValidation();
   checkOutTimeValidation();
@@ -128,12 +122,6 @@
       submitSetup(adForm);
     }
     adForm.reportValidity();
-  });
-
-  adFormSubmit.addEventListener('keydown', function (evt) {
-    if (adFormSubmit.checkValidity()) {
-      onSetupSubmitEnterKeydown(evt, adFormSubmit);
-    }
   });
 
   titleInput.addEventListener('keydown', function (evt) {
@@ -165,7 +153,7 @@
 
   adFormReset.addEventListener('keydown', function (evt) {
     evt.preventDefault();
-    if (evt.key === window.tools.Key.ESC) {
+    if (evt.key === window.tools.Key.ENTER) {
       resetForm();
     }
   });

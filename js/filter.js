@@ -3,67 +3,30 @@
 (function () {
   var mapFilter = document.querySelectorAll('.map__filter, .map__checkbox');
 
-  var housingPriceFilter = {
-    'middle': function (offer) {
-      return offer.price >= 10000 && offer.price < 50000;
-    },
-    'low': function (offer) {
-      return offer.price < 10000;
-    },
-    'high': function (offer) {
-      return offer.price >= 50000;
-    },
-    'any': function () {
-      return true;
+  var filterHousingPrice = function (offer, element) {
+    switch (element.value) {
+      case 'middle':
+        return offer.price >= 10000 && offer.price < 50000;
+      case 'low':
+        return offer.price < 10000;
+      case 'high':
+        return offer.price >= 50000;
+      case 'any':
+        return true;
     }
+    return false;
   };
 
-  var housingRoomsFilter = {
-    '1': function (offer) {
-      return offer.rooms === 1;
-    },
-    '2': function (offer) {
-      return offer.rooms === 2;
-    },
-    '3': function (offer) {
-      return offer.rooms === 3;
-    },
-    'any': function () {
-      return true;
-    }
+  var filterHousingRooms = function (offer, element) {
+    return element.value === 'any' ? true : offer.rooms === parseInt(element.value, 10);
   };
 
-  var housingGuestsFilter = {
-    '2': function (offer) {
-      return offer.guests === 2;
-    },
-    '1': function (offer) {
-      return offer.guests === 1;
-    },
-    '0': function (offer) {
-      return offer.guests === 0;
-    },
-    'any': function () {
-      return true;
-    }
+  var filterHousingGuests = function (offer, element) {
+    return element.value === 'any' ? true : offer.rooms === parseInt(element.value, 10);
   };
 
-  var housingTypeFilter = {
-    'flat': function (offer) {
-      return offer.type === 'flat';
-    },
-    'house': function (offer) {
-      return offer.type === 'house';
-    },
-    'palace': function (offer) {
-      return offer.type === 'palace';
-    },
-    'bungalo': function (offer) {
-      return offer.type === 'bungalo';
-    },
-    'any': function () {
-      return true;
-    }
+  var FilterHousingType = function (offer, element) {
+    return element.value === offer.type;
   };
 
   var filterFeatureFactory = function (feature) {
@@ -75,33 +38,41 @@
     };
   };
 
-  var filters = {
-    'housing-price': housingPriceFilter,
-    'housing-type': housingTypeFilter,
-    'housing-rooms': housingRoomsFilter,
-    'housing-guests': housingGuestsFilter,
-    'filter-wifi': {
-      'wifi': filterFeatureFactory('wifi')
-    },
-    'filter-dishwasher': {
-      'dishwasher': filterFeatureFactory('dishwasher')
-    },
-    'filter-washer': {
-      'washer': filterFeatureFactory('washer')
-    },
-    'filter-elevator': {
-      'elevator': filterFeatureFactory('elevator')
-    },
-    'filter-conditioner': {
-      'conditioner': filterFeatureFactory('conditioner')
+  var filterWifi = filterFeatureFactory('wifi');
+  var filterDishwasher = filterFeatureFactory('dishwasher');
+  var filterWasher = filterFeatureFactory('washer');
+  var filterElevator = filterFeatureFactory('elevator');
+  var filterConditioner = filterFeatureFactory('conditioner');
+
+  var filters = function (filterId) {
+    switch (filterId) {
+      case 'housing-price':
+        return filterHousingPrice;
+      case 'housing-type':
+        return FilterHousingType;
+      case 'housing-rooms':
+        return filterHousingRooms;
+      case 'housing-guests':
+        return filterHousingGuests;
+      case 'filter-wifi':
+        return filterWifi;
+      case 'filter-dishwasher':
+        return filterDishwasher;
+      case 'filter-washer':
+        return filterWasher;
+      case 'filter-elevator':
+        return filterElevator;
+      case 'filter-conditioner':
+        return filterConditioner;
     }
+    return null;
   };
 
   var filterHouses = function () {
-    var data = window.data;
+    var data = window.map.data;
     mapFilter.forEach(function (item) {
-      if (filters[item.id]) {
-        var filter = filters[item.id][item.value];
+      var filter = filters(item.id);
+      if (filter) {
         data = filterData(filter, data, item);
       }
     });

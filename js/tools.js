@@ -6,12 +6,14 @@
     ESC: 'Escape',
     LEFT_MOUSE: 0
   };
-  var HIDDEN_CLASS = 'hidden';
   var DEBOUNCE_INTERVAL = 500; // ms
 
-  var closeWindow = function (element) {
-    if (element) {
-      element.classList.add(HIDDEN_CLASS);
+  var closeWindow = function (selector) {
+    if (typeof selector === 'string') {
+      selector = document.querySelector(selector);
+    }
+    if (selector) {
+      selector.remove();
     }
   };
 
