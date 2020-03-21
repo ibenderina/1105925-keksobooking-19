@@ -74,6 +74,7 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
   window.movingPin = {
     showCurrentAddress: showCurrentAddress,
     moveOnCenter: moveMainPinOnCenter,

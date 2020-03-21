@@ -66,7 +66,7 @@
   };
 
   var showCreatedAds = function (data) {
-    data.slice(0, 5).forEach(createAds);
+    data.slice(0, window.filter.MAX_SHOWN_PINS).forEach(createAds);
     mapPins.appendChild(adsFragment);
   };
 
@@ -93,6 +93,7 @@
       activatePage();
     }
   });
+
   window.map = {
     showCreatedAds: showCreatedAds,
     deactivatePage: deactivatePage,

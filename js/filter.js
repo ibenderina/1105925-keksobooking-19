@@ -1,7 +1,8 @@
 'use strict';
 
 (function () {
-  var mapFilter = document.querySelectorAll('.map__filter, .map__checkbox');
+  var MAX_SHOWN_PINS = 5;
+  var mapFilter = Array.from(document.querySelectorAll('.map__filter, .map__checkbox'));
 
   var filterHousingPrice = function (offer, element) {
     switch (element.value) {
@@ -22,7 +23,7 @@
   };
 
   var filterHousingGuests = function (offer, element) {
-    return element.value === 'any' ? true : offer.rooms === parseInt(element.value, 10);
+    return element.value === 'any' ? true : offer.guests === parseInt(element.value, 10);
   };
 
   var filterHousingType = function (offer, element) {
@@ -70,26 +71,27 @@
 
   var filterHouses = function () {
     var data = window.map.data;
-    mapFilter.forEach(function (item) {
-      var filter = filters(item.id);
-      if (filter) {
-        data = filterData(filter, data, item);
-      }
+    var filteredData = [];
+    var activeFilters = mapFilter.filter(function (el) {
+      return el.value !== 'any' || el.checked;
     });
+    for (var i = 0; i < data.length && filteredData.length < MAX_SHOWN_PINS; i++) {
+      var dataItem = data[i];
+      for (var y = 0; y < activeFilters.length; y++) {
+        var filterEl = activeFilters[y];
+        var filterFunc = filters(filterEl.id);
+        if (filterFunc && !filterFunc(dataItem.offer, filterEl)) {
+          dataItem = null;
+          break;
+        }
+      }
+      if (dataItem) {
+        filteredData.push(dataItem);
+      }
+    }
     var mapCard = document.querySelector('.map__card');
     window.tools.closeWindow(mapCard);
-    renderFilteredPins(data);
-  };
-
-  var filterData = function (filter, data, element) {
-    return data.map(function (dataEl) {
-      if (filter(dataEl.offer, element)) {
-        return dataEl;
-      }
-      return null;
-    }).filter(function (item) {
-      return item;
-    });
+    renderFilteredPins(filteredData);
   };
 
   var removeAllPins = function () {
@@ -112,5 +114,8 @@
     });
   });
 
-  window.removeAllPins = removeAllPins;
+  window.filter = {
+    removeAllPins: removeAllPins,
+    MAX_SHOWN_PINS: MAX_SHOWN_PINS
+  };
 })();
