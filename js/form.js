@@ -71,7 +71,7 @@
 
   var resetForm = function () {
     window.resetPhotos();
-    window.removeAllPins();
+    window.filter.removeAllPins();
     window.movingPin.moveOnCenter();
     checkCapacityValidation();
     window.map.deactivatePage();

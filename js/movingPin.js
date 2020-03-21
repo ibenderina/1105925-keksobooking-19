@@ -1,10 +1,6 @@
 'use strict';
 
 (function () {
-  var Y = {
-    MIN: 130,
-    MAX: 630
-  };
   var MapPinStartCoord = {
     LEFT: 570 + 'px',
     TOP: 375 + 'px'
@@ -13,6 +9,10 @@
     HALF_WIDTH: 65 / 2,
     HEIGHT: 65,
     HALF_HEIGHT: 65 / 2
+  };
+  var Y = {
+    MIN: 130 - pinSize.HEIGHT,
+    MAX: 630 - pinSize.HEIGHT
   };
   var movingMapPin = document.querySelector('.map__pin--main');
   var address = document.querySelector('#address');

@@ -64,6 +64,14 @@
     return cardTemplateItemClone;
   };
 
+  var onCloseWindowKeydown = function (evt) {
+    if (evt.key === window.tools.Key.ESC) {
+      window.tools.closeWindow('.map__card');
+      window.map.removeActivePin();
+    }
+    document.removeEventListener('keydown', onCloseWindowKeydown);
+  };
+
   var showCreatedCards = function (element) {
     var card = createCard(parseInt(element.dataset.id, 10));
     window.tools.closeWindow('.map__card');
@@ -73,14 +81,8 @@
       window.tools.closeWindow(card);
       window.map.removeActivePin();
     });
+    document.addEventListener('keydown', onCloseWindowKeydown);
   };
-
-  document.addEventListener('keydown', function (evt) {
-    if (evt.key === window.tools.Key.ESC) {
-      window.tools.closeWindow('.map__card');
-      window.map.removeActivePin();
-    }
-  });
 
   window.showCreatedCards = showCreatedCards;
 })();
